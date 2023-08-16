@@ -1,13 +1,28 @@
 const User = require('../models/users');
 
-module.exports.profile = function(req,res){
-    return res.render('users_profile',{title:"Users Profile"});
+module.exports.profile =async function(req,res){
+    let user = await User.findById(req.params.id);
+    return res.render('users_profile',{
+        title:"Users Profile",
+        profile_user: user
+    });
+}
+
+module.exports.update =async function(req,res){
+    if(req.user.id == req.params.id){
+        await User.findByIdAndUpdate(req.params.id, req.body);
+        return res.redirect('back');
+    }
+    else{
+        return res.status(401).send('Unauthorized');
+    }
 }
 
 //Render the Sign Up Page
 module.exports.signUp = function(req,res){
-    if(req.isAuthenticated()){
-        return res.redirect('/users/profile');
+    if(req.isAuthenticated()){ //agar user logged  in hai aur signin wala url daal de toh -- usko profile page pe redirect kar do
+        let userId=req.user.id;
+        return res.redirect('/users/profile'+'/'+userId);
     }
 
     return res.render('user_sign_up',{
@@ -18,8 +33,9 @@ module.exports.signUp = function(req,res){
 
 //Render the Sign In Page
 module.exports.signIn = function(req,res){
-    if(req.isAuthenticated()){
-        return res.redirect('/users/profile');
+    if(req.isAuthenticated()){ //agar user logged  in hai aur signin wala url daal de toh -- usko profile page pe redirect kar do
+        let userId=req.user.id;
+        return res.redirect('/users/profile'+'/'+userId);
     }
 
     return res.render('user_sign_in',{

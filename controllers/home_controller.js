@@ -1,4 +1,5 @@
 const Post = require('../models/post');
+const User = require('../models/users');
 
 module.exports.home =async function(req,res){
     //console.log(req.cookies);
@@ -18,12 +19,12 @@ module.exports.home =async function(req,res){
             path: 'user'
         }
     }).exec();
+    const users = await User.find({});
     return res.render('home',{
         title : 'Codeial | Home',
-        posts: posts
+        posts: posts,
+        all_users: users
     });
-
-
 }
 
 // module.exports.profile = function(req,res){
