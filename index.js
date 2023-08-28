@@ -22,6 +22,9 @@ app.set('layout extractScripts', true);
 
 app.use(express.static('./assests'));
 
+//make the uploads path available to the browser
+app.use('/uploads', express.static(__dirname+ '/uploads'));
+
 
 //set up the view engine
 app.set('view engine','ejs');
