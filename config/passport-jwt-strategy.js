@@ -9,13 +9,13 @@ let opts = {
     secretOrKey : 'codeial'
 }
 
-passport.use(new JWTStrategy(opts, function(jwtPayLoad, done){
+passport.use(new JWTStrategy(opts,async function(jwtPayLoad, done){
     try{
-        let user = User.findById(jwtPayLoad._id);
-        console.log('*****user id',user);
         console.log('*****jwt Pay load',jwtPayLoad._id);
+        let user =await User.findById(jwtPayLoad._id);
+        console.log('*****user id',user.id);
         if(user){
-            console.log('user found*****user id',user);
+            console.log('user found*****user id',user._id);
             return done(null,user);
         }
         else{

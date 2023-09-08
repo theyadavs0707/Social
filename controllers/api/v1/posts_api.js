@@ -18,15 +18,12 @@ module.exports.destroy = async function (req, res) {
 
     try {
         let post = await Post.findById(req.params.id);
-        console.log(req.user._id);
+        console.log(req.user.id);
         // .id means converting the object id into string
 
-        if(post.user == req.user._id){ // here we are checking if the user is authorized to delete the post
+        if(post.user == req.user.id){ // here we are checking if the user is authorized to delete the post
             post.deleteOne();
             await Comment.deleteMany({ post:req.params.id });
-
-
-
             return res.json(200, {
                 message: "Post and associated comments deleted successfully"
             });
