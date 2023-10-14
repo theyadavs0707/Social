@@ -13,12 +13,20 @@ module.exports.home =async function(req,res){
     // });
 
     // populate the user of each post
-    const posts = await Post.find({}).sort('-createdAt').populate('user').populate({
+    // CHANGE :: populate the likes of each post and comment
+    let posts = await Post.find({})
+    .sort('-createdAt')
+    .populate('user')
+    .populate({
         path: 'comments',
+        populate: {
+            path: 'likes'
+        },
         populate: {
             path: 'user'
         }
-    }).exec();
+    }).populate('likes');
+
     const users = await User.find({});
     return res.render('home',{
         title : 'Codeial | Home',

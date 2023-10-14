@@ -28,6 +28,11 @@ module.exports.destroy = async function(req,res){
         let postId = comment.post ;
         comment.deleteOne();
         await Post.findByIdAndUpdate(postId , {$pull: {comments: req.params.id }});
+
+        // CHANGE :: destroy the associated likes for this comment
+        await Like.deleteMany({likeable: comment._id, onModel: 'Comment'});
+
+        
         return res.redirect('back');
     }
     else{
